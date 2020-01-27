@@ -1,0 +1,32 @@
+{
+  "name": "mentor",
+  "version": "1.0.0",
+  "description": "mentor mentee web API client",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev:build": "webpack -w",
+    "dev": "cross-env NODE_ENV=development node dist/index.bundle.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "cross-env": "^6.0.3",
+    "express": "^4.17.1",
+    "express-validation": "^1.0.3",
+    "helmet": "^3.21.2",
+    "joi": "^14.3.1",
+    "mongoose": "^5.8.7",
+    "validator": "^12.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "morgan": "^1.9.1",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-node-externals": "^1.7.2"
+  }
+}
