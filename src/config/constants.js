@@ -1,4 +1,7 @@
-const devConfig =   { MONGO_URL: 'mongodb://localhost/mentorjsapi-dev' };
+const devConfig =   { 
+    MONGO_URL: 'mongodb://localhost/mentorjsapi-dev',
+    JWT_SECRET: 'thisisasecret', 
+};
 const testConfig =  { MONGO_URL: 'mongodb://localhost/mentorjsapi-test'};
 const prodConfig =  { MONGO_URL: 'mongodb://localhost/mentorjsapi-prod'};
 const defaultConfig = {
