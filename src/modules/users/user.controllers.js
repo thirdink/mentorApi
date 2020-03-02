@@ -1,4 +1,5 @@
 import User from './user.model';
+import { getPostsList } from '../post/post.controllers';
 export async function signUp(req, res) {
     try {
         const user = await User.create(req.body);
@@ -8,8 +9,8 @@ export async function signUp(req, res) {
     }
 }
 
+
 export function login(req,res,next){
     res.status(200).json(req.user);
-
     return next();
 }

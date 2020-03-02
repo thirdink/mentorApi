@@ -13,4 +13,10 @@ routes.post('/',
             postController.createPost,
             );
 routes.get('/',postController.getPostsList);
+routes.get('/:id',postController.getPostById);
+routes.patch('/:id',
+            authJwt,
+            validate(postValidations.updatePost),
+            postController.updatePost,
+            );
 export default routes;
