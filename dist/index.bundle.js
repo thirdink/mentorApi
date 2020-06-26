@@ -143,7 +143,7 @@ eval("\n\nvar _express = __webpack_require__(/*! express */ \"express\");\n\nvar
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _user = __webpack_require__(/*! ./users/user.routes */ \"./src/modules/users/user.routes.js\");\n\nvar _user2 = _interopRequireDefault(_user);\n\nvar _post = __webpack_require__(/*! ./post/post.routes */ \"./src/modules/post/post.routes.js\");\n\nvar _post2 = _interopRequireDefault(_post);\n\nvar _auth = __webpack_require__(/*! ../services/auth.services */ \"./src/services/auth.services.js\");\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nexports.default = app => {\n  app.use('/api/v1/users', _user2.default);\n  app.use('/api/v1/posts', _post2.default); // app.get('/hello',authJwt,(req,res)=>{\n  //     res.send('This is a private route !!!!');\n  // });\n};\n\n//# sourceURL=webpack:///./src/modules/index.js?");
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _user = __webpack_require__(/*! ./users/user.routes */ \"./src/modules/users/user.routes.js\");\n\nvar _user2 = _interopRequireDefault(_user);\n\nvar _post = __webpack_require__(/*! ./post/post.routes */ \"./src/modules/post/post.routes.js\");\n\nvar _post2 = _interopRequireDefault(_post);\n\nvar _profile = __webpack_require__(/*! ./profile/profile.routes */ \"./src/modules/profile/profile.routes.js\");\n\nvar _profile2 = _interopRequireDefault(_profile);\n\nvar _auth = __webpack_require__(/*! ../services/auth.services */ \"./src/services/auth.services.js\");\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nexports.default = app => {\n  app.use('/api/v1/users', _user2.default);\n  app.use('/api/v1/posts', _post2.default);\n  app.get('/hello', _auth.authJwt, (req, res) => {\n    res.send('This is a private route !!!!');\n  });\n  app.use('/api/v1/profile', _profile2.default);\n};\n\n//# sourceURL=webpack:///./src/modules/index.js?");
 
 /***/ }),
 
@@ -192,6 +192,42 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n
 
 "use strict";
 eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _joi = __webpack_require__(/*! joi */ \"joi\");\n\nvar _joi2 = _interopRequireDefault(_joi);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nexports.default = {\n  createPost: {\n    body: {\n      title: _joi2.default.string().min(3).required(),\n      text: _joi2.default.string().min(10).required()\n    }\n  },\n  updatePost: {\n    body: {\n      title: _joi2.default.string().min(3),\n      text: _joi2.default.string().min(10)\n    }\n  }\n};\n\n//# sourceURL=webpack:///./src/modules/post/post.validations.js?");
+
+/***/ }),
+
+/***/ "./src/modules/profile/profile.controllers.js":
+/*!****************************************************!*\
+  !*** ./src/modules/profile/profile.controllers.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.createProfile = createProfile;\nexports.getProfileList = getProfileList;\n\nvar _httpStatus = __webpack_require__(/*! http-status */ \"http-status\");\n\nvar _httpStatus2 = _interopRequireDefault(_httpStatus);\n\nvar _profile = __webpack_require__(/*! ./profile.model */ \"./src/modules/profile/profile.model.js\");\n\nvar _profile2 = _interopRequireDefault(_profile);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nasync function createProfile(req, res) {\n  try {\n    const profile = await _profile2.default.createProfile(req.body, req.user._id);\n    return res.status(_httpStatus2.default.CREATED).json(profile);\n  } catch (e) {\n    return res.status(_httpStatus2.default.BAD_REQUEST).json(e);\n  }\n}\n\nasync function getProfileList(req, res) {\n  const limit = parseInt(req.query.limit, 0);\n  const skip = parseInt(req.queery.skip, 0);\n\n  try {\n    const profile = await _profile2.default.list({\n      limit,\n      skip\n    });\n    return res.status(_httpStatus2.default.OK).json(profile);\n  } catch (e) {\n    return res.status(_httpStatus2.default.BAD_REQUEST).json(e);\n  }\n}\n\n//# sourceURL=webpack:///./src/modules/profile/profile.controllers.js?");
+
+/***/ }),
+
+/***/ "./src/modules/profile/profile.model.js":
+/*!**********************************************!*\
+  !*** ./src/modules/profile/profile.model.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _mongoose = __webpack_require__(/*! mongoose */ \"mongoose\");\n\nvar _mongoose2 = _interopRequireDefault(_mongoose);\n\nvar _slug = __webpack_require__(/*! slug */ \"slug\");\n\nvar _slug2 = _interopRequireDefault(_slug);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nconst ProfileSchema = new _mongoose.Schema({\n  school: {\n    type: String,\n    trim: false,\n    required: [true, 'School is required'],\n    minLength: [3, 'School needs to be longer'],\n    unique: false\n  },\n  user: {\n    type: _mongoose.Schema.Types.ObjectId,\n    ref: 'User'\n  }\n}, {\n  timestamps: true\n});\nProfileSchema.methods = {\n  toJSON() {\n    return {\n      _id: this._id,\n      school: this.school,\n      user: this.user\n    };\n  }\n\n};\nProfileSchema.statics = {\n  createProfile(args, user) {\n    return this.create({ ...args,\n      user\n    });\n  },\n\n  list({\n    skip = 0,\n    limit = 5\n  } = {}) {\n    return this.find().sort({\n      createdAt: -1\n    }).skip(skip).limit(limit).populate('user');\n  }\n\n};\nexports.default = _mongoose2.default.model('Profile', ProfileSchema);\n\n//# sourceURL=webpack:///./src/modules/profile/profile.model.js?");
+
+/***/ }),
+
+/***/ "./src/modules/profile/profile.routes.js":
+/*!***********************************************!*\
+  !*** ./src/modules/profile/profile.routes.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _express = __webpack_require__(/*! express */ \"express\");\n\nvar _auth = __webpack_require__(/*! ../../services/auth.services */ \"./src/services/auth.services.js\");\n\nvar _profile = __webpack_require__(/*! ./profile.controllers */ \"./src/modules/profile/profile.controllers.js\");\n\nvar profileController = _interopRequireWildcard(_profile);\n\nfunction _getRequireWildcardCache() { if (typeof WeakMap !== \"function\") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }\n\nfunction _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== \"object\" && typeof obj !== \"function\") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }\n\nconst routes = new _express.Router();\nroutes.post('/', _auth.authJwt, profileController.createProfile);\nroutes.get('/', _auth.authJwt, profileController.getProfileList);\nexports.default = routes;\n\n//# sourceURL=webpack:///./src/modules/profile/profile.routes.js?");
 
 /***/ }),
 
