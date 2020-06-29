@@ -12,8 +12,8 @@ routes.post(
   validate(postValidations.createPost),
   postController.createPost,
 );
-routes.get('/', postController.getPostsList);
-routes.get('/:id', postController.getPostById);
+routes.get('/', authJwt,postController.getPostsList);
+routes.get('/:id', authJwt,postController.getPostById);
 routes.patch(
   '/:id',
   authJwt,
