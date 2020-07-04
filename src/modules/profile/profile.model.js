@@ -1,14 +1,74 @@
 import mongoose, { Schema } from 'mongoose';
 import slug from 'slug';
 
+
 const ProfileSchema = new Schema(
   {
-    school: {
-      type: String,
-      trim: false,
-      required: [true, 'School is required'],
-      minLength: [3, 'School needs to be longer'],
-      unique: false,
+    education: {
+        school: {
+          type: String,
+          required:[true,'School is required']
+        },
+        degree: {
+          type: String,
+          required:[true,'Degree is required']
+        },
+        fieldOfStudy:{
+          type:String,
+          required:[true,'Field of study is required']
+        },
+        from : {
+          type: Date,
+          required:[true,'from is required']
+        },
+        to: {
+          type: Date
+        },
+        current: {
+          type: Boolean,
+          default: false
+        },
+        description:{
+          type: String
+        }
+    },
+    experience:{
+      title:{
+        type: String,
+        required:[true,'title is required']
+      },
+      company:{
+        type: String,
+        required:[true,'Company is required']
+      },
+      location:{
+        type: String,
+        required:[true,'location is required']
+      },
+      from:{
+        type: Date,
+        required:[true,'from is required']
+      },
+      to:{
+        type: Date
+      },
+      current:{
+        type: Boolean,
+        default: false
+      },
+      description:{
+        type: String
+      }
+    },
+    social:{
+      twitter: String,
+      youtube: String,
+      instagram: String,
+      github: String,
+      linkedin: String
+    },
+    about:{
+      type: String
     },
     user: {
       type: Schema.Types.ObjectId,
