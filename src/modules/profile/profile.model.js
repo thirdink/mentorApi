@@ -4,7 +4,8 @@ import slug from 'slug';
 
 const ProfileSchema = new Schema(
   {
-    education: {
+    education: [
+      {
         school: {
           type: String,
           required:[true,'School is required']
@@ -31,7 +32,9 @@ const ProfileSchema = new Schema(
         description:{
           type: String
         }
-    },
+      }
+      
+      ],
     experience:{
       title:{
         type: String,

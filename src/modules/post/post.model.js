@@ -40,7 +40,6 @@ PostSchema.plugin(uniqueValidator, {
 
 PostSchema.pre('validate', function (next) {
   this._slugify();
-
   next();
 });
 
